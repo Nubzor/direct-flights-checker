@@ -1,0 +1,26 @@
+{
+  "name": "direct-flights-checker",
+  "version": "1.0.0",
+  "description": "An app to check direct fligts from the specified country",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint -c .eslintrc --ext .ts .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nubzor/direct-flights-checker.git"
+  },
+  "author": "Mateusz Marzecki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nubzor/direct-flights-checker/issues"
+  },
+  "homepage": "https://github.com/Nubzor/direct-flights-checker#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0",
+    "typescript": "^4.4.4"
+  }
+}
