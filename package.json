@@ -4,8 +4,8 @@
   "description": "An app to check direct fligts from the specified country",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint -c .eslintrc --ext .ts .",
-    "start": "nodemon index.ts",
+    "lint": "eslint -c .eslintrc --ext .ts ./src",
+    "start": "nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
