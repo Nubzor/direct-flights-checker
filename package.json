@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Nubzor/direct-flights-checker#readme",
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
     "eslint": "^8.2.0",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "dotenv": "^10.0.0",
+    "express": "^4.17.1",
     "got": "^11.8.2"
   }
 }

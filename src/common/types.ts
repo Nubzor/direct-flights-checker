@@ -8,6 +8,10 @@ export interface CacheConfig {
     cacheDuration: number;
 }
 
+export interface ServerConfig {
+    DEFAULT_PORT: number;
+}
+
 export interface CachedObject {
     validUntil: number;
     item: Array<any> | object | null;
