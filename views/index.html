@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Where can you fly from Poland?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        const airports = <%- airports %>;
+    </script>
+    <style>
+        .listings {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Polish airports</h1>
+        <p>A list of polish airports</p>
+        <div class="listings">
+            <ul class="airports"></ul>
+            <ul class="routes"></ul>
+        </div>
+    </div>
+    <script>
+        const airportsNode = document.querySelector('.airports');
+
+        airports
+            .sort((a, b) => ('' + a.name).localeCompare(b.name))
+            .forEach(airportData => {
+                const node = document.createElement('li');
+
+                node.innerText = `${airportData.iata} - ${airportData.name}`;
+                node.setAttribute('data-icao', airportData.icao);
+
+                airportsNode.append(node);
+            });
+
+        const buildRoutesDOM = routes => {
+            const routesNode = document.querySelector('.routes');
+
+            routes
+                .sort((a, b) => ('' + a.destination.countryCode).localeCompare(b.destination.countryCode))
+                .forEach(route => {
+                    const node = document.createElement('li');
+
+                    node.innerText = `Where: ${route.destination.countryCode} - ${route.destination.name}, Who: ${route.operators.map(operator => operator.name).join(', ')}, ${Math.floor(route.averageDailyFlights)} times a day!`;
+ 
+                    routesNode.appendChild(node);                    
+                });
+        };
+
+        const airportNodeClickCallback = event => {
+            const { target: { dataset: { icao } } } = event;
+
+            fetch(`/routes/${icao}`)
+                .then(response => response.json())
+                .then(buildRoutesDOM);
+        };
+
+        airportsNode.addEventListener('click', airportNodeClickCallback);
+    </script>
+</body>
+</html>
