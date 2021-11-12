@@ -1,43 +1,13 @@
 import dontenv from 'dotenv';
-import got, { Got } from 'got';
+import Airports from './Airports';
 
 dontenv.config();
 
-interface APIConfig {
-    id: string;
-    key: string;
-    url: string;
+const polandCenterCords = {
+    lat: 52.196283,
+    lon: 19.356571,
 }
 
-const API_CONFIG: APIConfig = {
-    id: process.env.API_ID || '',
-    key: process.env.API_KEY || '',
-    url: 'https://api.flightstats.com/flex/airports/rest',
-}
+const airPorts = new Airports(350, 30);
 
-enum API_PATHS {
-    AIRPORTS = 'v1/json/active',  
-}
-
-class GotWrapper {
-    private readonly instance: Got;
-
-    constructor(config: APIConfig) {    
-        this.instance = got.extend({
-            prefixUrl: config.url,
-            searchParams: {
-                appId: config.id,
-                appKey: config.key,
-            }
-        });
-    }
-
-    getInstance(): Got {
-        return this.instance;
-    }
-}
-
-const gotInstance: Got = new GotWrapper(API_CONFIG).getInstance();
-
-gotInstance(API_PATHS.AIRPORTS)
-    .then(res => console.log(res.body));
+// airPorts.getAirportsByCoorindates(polandCenterCords.lat, polandCenterCords.lon);
