@@ -15,6 +15,8 @@ const app = express();
 app.set("views", path.join( __dirname, "views" ));
 app.engine('html', ejs.renderFile);
 
+app.use('/static', express.static(path.join(__dirname, '..', 'views', 'statics')));
+
 const polandCenterCords = {
 	lat: 52.196283,
 	lon: 19.356571,

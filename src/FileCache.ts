@@ -52,7 +52,9 @@ class FileCache {
                 }
 
                 cachedObject.getItem = function() {
-                    console.info('Retreving data from cache!');
+                    const _cacheName: string = cacheName;
+
+                    console.info('Retreving data from cache!', _cacheName);
 
                     return this.item;
                 }

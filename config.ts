@@ -2,7 +2,7 @@ import path from 'path';
 
 import { APIConfig, CacheConfig, ServerConfig } from "./src/common/types";
 
-export const API_CONFIG: APIConfig = {
+export const AERODATABOX_API_CONFIG: APIConfig = {
     key: process.env.API_KEY || '',
     url: 'https://aerodatabox.p.rapidapi.com/',
 };

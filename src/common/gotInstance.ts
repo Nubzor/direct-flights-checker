@@ -1,7 +1,7 @@
 import { Got } from "got/dist/source";
-import { API_CONFIG } from "../../config";
+import { AERODATABOX_API_CONFIG } from "../../config";
 import GotWrapper from "./GotWrapper";
 
-const gotInstance: Got = new GotWrapper(API_CONFIG).getInstance();
+const gotInstance: Got = new GotWrapper(AERODATABOX_API_CONFIG).getInstance();
 
 export default gotInstance;
