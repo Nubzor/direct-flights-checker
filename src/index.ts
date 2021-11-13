@@ -1,4 +1,3 @@
-import dontenv from 'dotenv';
 import express from 'express';
 import ejs from 'ejs';
 import path from 'path';
@@ -7,8 +6,6 @@ import { SERVER_CONFIG } from '../config';
 
 import Airports from './Airports';
 import Routes from './Routes';
-
-dontenv.config();
 
 const app = express();
 

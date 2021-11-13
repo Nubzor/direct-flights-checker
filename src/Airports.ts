@@ -1,4 +1,4 @@
-import got from "./common/gotInstance";
+import {aeroDataBoxGotInstance as got} from "./common/gotInstance";
 import { AirportModel, AirportResponse, CachedObject } from "./common/types";
 import FileCache from "./FileCache";
 

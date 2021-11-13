@@ -2,16 +2,12 @@ import got, { Got } from 'got';
 
 import { APIConfig } from './types';
 
-class GotWrapper {
+class GotAviationEdgeWrapper {
     private readonly instance: Got;
 
     constructor(config: APIConfig) {    
         this.instance = got.extend({
             prefixUrl: config.url,
-            headers: {
-                'x-rapidapi-host': 'aerodatabox.p.rapidapi.com',
-                'x-rapidapi-key': config.key,
-            },
         });
     }
 
@@ -20,4 +16,4 @@ class GotWrapper {
     }
 }
 
-export default GotWrapper;
+export default GotAviationEdgeWrapper;
