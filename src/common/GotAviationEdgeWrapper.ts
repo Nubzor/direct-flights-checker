@@ -8,6 +8,9 @@ class GotAviationEdgeWrapper {
     constructor(config: APIConfig) {    
         this.instance = got.extend({
             prefixUrl: config.url,
+            searchParams: {
+                key: config.key,
+            }
         });
     }
 

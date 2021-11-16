@@ -39,9 +39,11 @@ app.get('/', (req, res) => {
 app.get('/routes/:icao', (req, res) => {
 	const icao = req.params.icao;
 
-	routes.getAirportRoutes(icao).then(response => {
-		res.send(response);
-	})
+	routes.getFutureFlightsByIata('GDN', 1);
+
+	// routes.getAirportRoutes(icao).then(response => {
+	// 	res.send(response);
+	// })
 });
 
 app.get('*', (req, res) => {

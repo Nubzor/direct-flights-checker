@@ -17,7 +17,7 @@ export const AVIATION_EDGE_API_CONFIG: APIConfig = {
 
 export const CACHE_CONFIG: CacheConfig = {
     cacheDirectory: path.join(__dirname, "src", "cache"),
-    cacheDuration: 3600, // 1h in minutes
+    cacheDuration: Number.MAX_SAFE_INTEGER, // indefinite
 }
 
 export const SERVER_CONFIG: ServerConfig = {
