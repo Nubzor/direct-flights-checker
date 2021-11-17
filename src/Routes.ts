@@ -40,10 +40,7 @@ class Routes {
                 return {};
             })
             .then((storedData: any) => {
-                const dates = Object.keys(storedData)
-                    .filter(date => new Date(todaysDate) > new Date(date))
-                    .sort((a, b) => Number(new Date(a) > new Date(b)))
-                    .slice(0, period);
+                const dates = this.prepareCacheData(storedData, todaysDate, period);
 
                 if (dates.length === period) {
                     return dates.map(date => storedData(date));
@@ -58,6 +55,13 @@ class Routes {
                     return this.fetchMissingRecords(todaysDate, period, iata);
                 }
             });
+    }
+
+    private prepareCacheData(storedData: any, todaysDate: string, period: number): any {
+        return Object.keys(storedData)
+                    .filter(date => new Date(date) > new Date(todaysDate))
+                    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+                    .slice(0, period);
     }
 
     private fetchMissingRecords(startingDate: string, period: number, iata: string): Promise<any> {
