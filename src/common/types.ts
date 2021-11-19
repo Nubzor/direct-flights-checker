@@ -1,3 +1,9 @@
+declare global {
+    interface Date {
+        addDays (days?: number) : Date;
+    }
+}
+
 export interface APIConfig {
     key: string;
     url: string;
@@ -14,10 +20,17 @@ export interface ServerConfig {
 
 export interface CachedObject {
     validUntil: number;
-    item: Array<any> | object | null;
+    item: CacheItem;
     isValid?: () => boolean;
     getItem?: () => Array<any> | object | null;
 }
+
+export type CacheItem = { [key: string]: any; } | Array<{[ key: string]: any; }> | string | number
+export type RoutesCacheItem = Array<RouteItem>
+export type RouteItem = { [key: string]: {
+    [key: string]: any;
+}; };
+
 
 export interface AirportResponse {
     items: Array<AirportModel>

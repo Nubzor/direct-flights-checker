@@ -1,4 +1,18 @@
 import Routes from '@src/Routes';
+import { mocked } from "ts-jest/utils";
+import * as got from '../src/common/gotInstance';
+
+beforeAll(() => {
+    const mockedGot = mocked(got);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    mockedGot.aviationEdgeGotInstance = jest.fn();
+
+    mockedGot.aviationEdgeGotInstance.mockReturnValue({
+        json: () => Promise.resolve({}),
+    } as any)
+});
 
 describe("A Routes class tests", () => {
     const routes: Routes = new Routes();
@@ -35,4 +49,19 @@ describe("A Routes class tests", () => {
         expect(routes['prepareCacheData'](cachedData, '2021-11-14', -5))
             .toEqual([]);
     });
+
+    test.each([[{}, -1, 0], [{}, 0, 0], [{}, 4, 4], [{'2021-11-12': ''}, 3, 3]])(`It should fetch the missing entries and sum up to period value - %i`, (cachedData, period, length) => {
+        return routes['collectMissingRecords'](cachedData, 'GDN', period)
+            .then(data => {
+                expect(data.length).toBe(length);
+            })
+    });
+
+    test.each([0, 2, 4, 6, 8, 10, 50, 150, 300])('fetching (%i) records', period => {
+		return routes['fetchMissingRecords']('2021-11-19', period, 'GDN')
+            .then(data => {
+                expect(data.length).toBe(period);
+            })
+	});
+
 });

@@ -2,25 +2,31 @@ import fs from 'fs';
 import path from 'path';
 
 import { CACHE_CONFIG } from '../config';
-import { CachedObject } from './common/types';
+import { CachedObject, CacheItem } from './common/types';
 
 class FileCache {
     private cacheDirectory: string;
     private cacheDuration: number;
 
-    constructor(cacheDuration?: number) {
-        this.cacheDirectory = CACHE_CONFIG.cacheDirectory;
-        this.cacheDuration = cacheDuration || CACHE_CONFIG.cacheDuration;
+    constructor(cacheDurationInSeconds?: number, cacheDirectory?: string) {
+        this.cacheDirectory = cacheDirectory || CACHE_CONFIG.cacheDirectory;
+        this.cacheDuration = cacheDurationInSeconds || CACHE_CONFIG.cacheDuration;
     }
 
-    cacheItem(cacheName: string, cacheItem: any) {
+    cacheItem(cacheName: string, cacheItem: CacheItem): Promise<CacheItem> {
         const cacheObject: CachedObject = {
             validUntil: Date.now() + this.cacheDuration * 1000,
             item: cacheItem,
         };
 
-        fs.writeFile(this.getCachePath(cacheName), JSON.stringify(cacheObject), err => {
-            console.log(err);
+        return new Promise((resolve, reject) => {
+            fs.writeFile(this.getCachePath(cacheName), JSON.stringify(cacheObject), err => {
+               if (err) {
+                   return reject(err);
+               }
+
+               resolve(true);
+            });
         });
     }
 
@@ -51,7 +57,7 @@ class FileCache {
                     return this.validUntil >= Date.now(); 
                 }
 
-                cachedObject.getItem = function() {
+                cachedObject.getItem = function(): any {
                     const _cacheName: string = cacheName;
 
                     console.info('Retreving data from cache!', _cacheName);

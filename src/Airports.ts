@@ -20,7 +20,7 @@ class Airports {
     }
 
 
-    getAirportsByCoorindates(lat: number, lon: number): Promise<any> {
+        getAirportsByCoorindates(lat: number, lon: number): Promise<any> {
         return this
             .fileCache
             .getCachedItem(this.cacheKey)

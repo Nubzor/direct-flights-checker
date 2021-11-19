@@ -1,22 +1,8 @@
 import { aviationEdgeGotInstance as got } from "./common/gotInstance";
-import { CachedObject, RoutesResponse } from "./common/types";
+import { CachedObject, RoutesItems, RoutesResponse } from "./common/types";
 import FileCache from "./FileCache";
 
-
-// consider moving this two somewhere else
-declare global {
-    interface Date {
-        addDays (days?: number) : Date;
-    }
-}
-
-Date.prototype.addDays = function(days: number) {
-    const date = new Date(this.valueOf());
-
-    date.setDate(date.getDate() + days);
-
-    return date;
-}
+import './common/commons';
 
 class Routes {
     private fileCache: FileCache;
@@ -25,9 +11,8 @@ class Routes {
         this.fileCache = new FileCache();
     }
 
-    getFutureFlightsByIata(iata: string, period = 14): Promise<any> {
+    getFutureFlightsByIata(iata: string, period = 14): Promise<RoutesItems> {
         const cacheName = `flights_${iata}.json`;
-        const [todaysDate] = new Date().toISOString().split('T');
 
         return this
             .fileCache
@@ -39,27 +24,37 @@ class Routes {
 
                 return {};
             })
-            .then((storedData: any) => {
-                const dates = this.prepareCacheData(storedData, todaysDate, period);
-
-                if (dates.length === period) {
-                    return dates.map(date => storedData(date));
-                }
-
-                if (dates.length > 0) {
-                    return dates.map(date => storedData(date))
-                            .concat(this.fetchMissingRecords(dates[dates.length - 1], period - dates.length, iata));
-                }
-
-                if (dates.length === 0) {
-                    return this.fetchMissingRecords(todaysDate, period, iata);
-                }
-            });
+            .then((data => this.collectMissingRecords(data, iata, period)));
     }
 
-    private prepareCacheData(storedData: any, todaysDate: string, period: number): any {
+    private collectMissingRecords(storedData: RoutesItems, iata: string, period: number): Promise<any> {
+        const [todaysDate] = new Date().toISOString().split('T');
+
+        const dates = this.prepareCacheData(storedData, todaysDate, period);
+
+        if (period < 0) {
+            return Promise.resolve([]);
+        }
+
+        if (dates.length === period) {
+            return Promise.resolve(dates.map((date: string) => storedData[date]));
+        }
+
+        if (dates.length > 0) {
+            return this.fetchMissingRecords(dates[dates.length - 1], period - dates.length, iata)
+                        .then(data => dates.map((date: string) => storedData[date]).concat(data));
+        }
+
+        if (dates.length === 0) {
+            return this.fetchMissingRecords(todaysDate, period, iata);
+        }
+
+        return Promise.resolve([]);
+    }
+
+    private prepareCacheData(storedData: RoutesItems, todaysDate: string, period: number): Array<string> {
         return Object.keys(storedData)
-                    .filter(date => new Date(date) > new Date(todaysDate))
+                    .filter((date: string) => new Date(date) > new Date(todaysDate))
                     .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
                     .slice(0, period);
     }
@@ -69,8 +64,6 @@ class Routes {
             const requests =
                 [...Array(period).keys()].map((value, index) => {
                     const [_date] = new Date().addDays(index).toISOString().split('T');
-
-                    console.log(_date);
 
                     // flightsFuture returns results since a week after current date
                     // todo determinate how to fetch data for the next 7 days
@@ -84,8 +77,8 @@ class Routes {
                 })
 
             Promise.all(requests).then(response => {
-                console.log(response);
-            });
+                resolve(response);
+            }).catch(reject);
         });
     }
 }
