@@ -1,5 +1,5 @@
 import { aviationEdgeGotInstance as got } from "./common/gotInstance";
-import { CachedObject, RoutesItems, RoutesResponse } from "./common/types";
+import { CachedObject, RouteItems, RoutesResponse } from "./common/types";
 import FileCache from "./FileCache";
 
 import './common/commons';
@@ -11,7 +11,7 @@ class Routes {
         this.fileCache = new FileCache();
     }
 
-    getFutureFlightsByIata(iata: string, period = 14): Promise<RoutesItems> {
+    getFutureFlightsByIata(iata: string, period = 14): Promise<RouteItems> {
         const cacheName = `flights_${iata}.json`;
 
         return this
@@ -27,7 +27,7 @@ class Routes {
             .then((data => this.collectMissingRecords(data, iata, period)));
     }
 
-    private collectMissingRecords(storedData: RoutesItems, iata: string, period: number): Promise<any> {
+    private collectMissingRecords(storedData: RouteItems, iata: string, period: number): Promise<any> {
         const [todaysDate] = new Date().toISOString().split('T');
 
         const dates = this.prepareCacheData(storedData, todaysDate, period);
@@ -52,7 +52,7 @@ class Routes {
         return Promise.resolve([]);
     }
 
-    private prepareCacheData(storedData: RoutesItems, todaysDate: string, period: number): Array<string> {
+    private prepareCacheData(storedData: RouteItems, todaysDate: string, period: number): Array<string> {
         return Object.keys(storedData)
                     .filter((date: string) => new Date(date) > new Date(todaysDate))
                     .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())

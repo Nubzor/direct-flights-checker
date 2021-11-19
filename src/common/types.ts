@@ -26,10 +26,10 @@ export interface CachedObject {
 }
 
 export type CacheItem = { [key: string]: any; } | Array<{[ key: string]: any; }> | string | number
-export type RoutesCacheItem = Array<RouteItem>
-export type RouteItem = { [key: string]: {
+export type RouteItems = { [key: string]: RouteItem };
+export type RouteItem = {
     [key: string]: any;
-}; };
+}
 
 
 export interface AirportResponse {
